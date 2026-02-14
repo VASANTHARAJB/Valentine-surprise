@@ -25,7 +25,7 @@
             color: var(--text-main);
             min-height: 100vh;
             width: 100vw;
-            overflow: hidden;
+            overflow: hidden; /* Prevents scrolling */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -38,8 +38,8 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             object-fit: cover;
-            z-index: 0; /* Behind everything */
-            opacity: 0; /* Hidden initially */
+            z-index: 0;
+            opacity: 0;
             transition: opacity 2s ease-in-out;
         }
 
@@ -53,7 +53,7 @@
         #lockScreen input {
             padding: 12px; border-radius: 5px; border: 1px solid var(--gold);
             background: transparent; color: white; font-size: 1.2rem; text-align: center; margin: 15px 0;
-            outline: none;
+            outline: none; width: 150px;
         }
         #lockScreen button {
             padding: 10px 30px; background: var(--rose); color: white; border: none;
@@ -62,14 +62,9 @@
 
         /* --- BACKGROUND PARTICLES --- */
         .dust {
-            position: absolute;
-            width: 4px; height: 4px;
-            background: var(--gold);
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: floatDust 15s infinite linear;
-            pointer-events: none;
-            z-index: 1;
+            position: absolute; width: 4px; height: 4px; background: var(--gold);
+            border-radius: 50%; opacity: 0.3; animation: floatDust 15s infinite linear;
+            pointer-events: none; z-index: 1;
         }
         @keyframes floatDust {
             0% { transform: translateY(100vh) scale(0); opacity: 0; }
@@ -116,6 +111,8 @@
         .app-container {
             position: relative; width: 90%; max-width: 450px; z-index: 10;
             opacity: 0; pointer-events: none; transition: opacity 1s 0.5s;
+            /* Flex ensures cards are centered properly */
+            display: flex; justify-content: center; 
         }
         .app-container.visible { opacity: 1; pointer-events: auto; }
 
@@ -126,6 +123,7 @@
             text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.4);
             display: none; flex-direction: column; align-items: center;
             animation: slideUp 0.8s ease-out;
+            width: 100%;
             min-height: 400px;
             justify-content: center;
         }
@@ -139,8 +137,10 @@
         }
         p { line-height: 1.6; color: #ddd; margin-bottom: 25px; font-size: 1rem; }
 
+        /* --- RESPONSIVE PHOTO STACK --- */
         .photo-stack {
-            position: relative; width: 100%; height: 424px;
+            position: relative; width: 100%; 
+            height: 350px; /* Default desktop height */
             margin-bottom: 25px; border-radius: 15px; overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
@@ -154,18 +154,16 @@
             background: transparent; border: 1px solid var(--gold); color: var(--gold);
             padding: 12px 30px; border-radius: 50px; font-size: 0.9rem; cursor: pointer;
             transition: all 0.2s; text-transform: uppercase; letter-spacing: 2px; font-weight: 600;
-            margin-top: auto;
+            margin-top: auto; white-space: nowrap;
         }
         .btn:active { transform: scale(0.95); }
         .btn-primary { background: var(--rose); border: none; color: white; box-shadow: 0 5px 20px rgba(255, 77, 109, 0.4); }
 
-        /* Music Button */
         .btn-music {
             background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.5);
             width: 80px; height: 80px; border-radius: 50%; font-size: 2rem;
             display: flex; align-items: center; justify-content: center;
-            margin: 20px auto; animation: pulseBtn 2s infinite; cursor: pointer;
-            color: white;
+            margin: 20px auto; animation: pulseBtn 2s infinite; cursor: pointer; color: white;
         }
         @keyframes pulseBtn {
             0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
@@ -176,11 +174,77 @@
         .choice-container { display: flex; gap: 15px; justify-content: center; width: 100%; margin-top: 10px; }
         .tap-hint { margin-top: 240px; color: var(--gold); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
+        /* =========================================
+           MOBILE RESPONSIVE MEDIA QUERIES 
+           ========================================= */
+        
+        /* Tablets and Large Phones */
+        @media screen and (max-width: 768px) {
+            .card {
+                padding: 25px 15px;
+                min-height: 350px;
+            }
+            .photo-stack {
+                height: 300px; /* Smaller images */
+            }
+            h1 { font-size: 1.8rem; }
+        }
+
+        /* Small Mobile Phones (Portrait) */
+        @media screen and (max-width: 480px) {
+            .app-container { width: 95%; }
+            .card {
+                padding: 20px 15px;
+                min-height: auto; /* Allow content to dictate height */
+            }
+            .photo-stack {
+                height: 250px; /* Even smaller for phones */
+                margin-bottom: 15px;
+            }
+            h1 { font-size: 1.5rem; margin-bottom: 10px; }
+            p { font-size: 0.9rem; margin-bottom: 15px; }
+            
+            .envelope { transform: scale(0.8); } /* Shrink envelope */
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.8rem;
+            }
+            .btn-music {
+                width: 60px; height: 60px; font-size: 1.5rem;
+            }
+        }
+
+        /* Landscape Mode (Short Screens) */
+        @media screen and (max-height: 600px) {
+            .app-container { max-width: 600px; }
+            .card { 
+                flex-direction: row; 
+                flex-wrap: wrap; 
+                align-items: center; 
+                justify-content: center;
+                padding: 10px;
+                min-height: 90vh;
+            }
+            /* Adjust photo stack for landscape */
+            .photo-stack {
+                width: 40%;
+                height: 150px;
+                margin-right: 15px;
+                margin-bottom: 0;
+            }
+            /* Text adjustments for side-by-side layout */
+            .card h1, .card p, .card button {
+                flex: 1;
+                min-width: 200px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <video id="bgVideo" src="./video.mp4" playsinline loop></video>
+    <video id="bgVideo" src="./video.mp4" playsinline loop muted></video>
 
     <div id="lockScreen">
         <h1 style="margin-bottom:10px;">Private Message ❤️</h1>
@@ -207,7 +271,7 @@
                 <img src="./1.jpeg" class="photo show" alt="Us 1">
                 <img src="./2.jpeg" class="photo" alt="Us 2">
                 <img src="./3.jpeg" class="photo" alt="Us 3">
-                 <img src="./4.jpeg" class="photo" alt="Us 4">
+                <img src="./4.jpeg" class="photo" alt="Us 4">
             </div>
             <p>Every moment with you is magic.</p>
             <button class="btn" onclick="nextSlide('s2')">Open My Heart</button>
@@ -289,25 +353,20 @@
         function nextSlide(id) {
             document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            
-            // Optional: If you want video to appear early, uncomment this:
-            // if(id === 's1') document.getElementById('bgVideo').style.opacity = '0.5';
         }
 
-        // --- 4. MUSIC/VIDEO PLAYER (UPDATED) ---
+        // --- 4. MUSIC/VIDEO PLAYER ---
         function playMusic() {
             var video = document.getElementById("bgVideo");
             
-            // 1. Play the audio/video
-            video.play().then(() => {
-                // 2. Fade in the video as a background wallpaper
-                video.style.opacity = '1';
+            // Unmute the video so music plays
+            video.muted = false;
 
-                // 3. UI Updates
+            video.play().then(() => {
+                video.style.opacity = '1';
                 document.getElementById('playBtn').style.display = 'none';
                 document.getElementById('listenText').innerHTML = "Playing... 🎶<br>Wait for it...";
                 
-                // 4. Reveal 'Next' button after 4 seconds
                 setTimeout(() => {
                     document.getElementById('listenText').style.display = 'none';
                     document.getElementById('continueBtn').style.display = 'inline-block';
@@ -321,9 +380,11 @@
         let currentPhoto = 0;
         const photos = document.querySelectorAll('.photo');
         setInterval(() => {
-            photos[currentPhoto].classList.remove('show');
-            currentPhoto = (currentPhoto + 1) % photos.length;
-            photos[currentPhoto].classList.add('show');
+            if(photos.length > 0) {
+                photos[currentPhoto].classList.remove('show');
+                currentPhoto = (currentPhoto + 1) % photos.length;
+                photos[currentPhoto].classList.add('show');
+            }
         }, 3000);
 
         // --- 6. DODGE BUTTON ---
@@ -331,9 +392,15 @@
             const btn = document.getElementById('noBtn');
             const card = document.getElementById('s3');
             
-            const maxX = card.clientWidth - btn.clientWidth - 20;
-            const maxY = card.clientHeight - btn.clientHeight - 20;
+            // Get dimensions
+            const cardRect = card.getBoundingClientRect();
+            const btnRect = btn.getBoundingClientRect();
             
+            // Calculate safe area (stay inside card)
+            const maxX = cardRect.width - btnRect.width - 40; // 40px padding buffer
+            const maxY = cardRect.height - btnRect.height - 40;
+            
+            // Generate random position
             const x = Math.random() * maxX - (maxX / 2);
             const y = Math.random() * maxY - (maxY / 2);
             
